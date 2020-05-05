@@ -1,5 +1,7 @@
-{{ 'id,category,supplier,nameContains' | importRequestParams }}
-{{ limit ?? 100 | assignTo: limit }}
+```code|q
+'id,category,supplier,nameContains' |> importRequestParams
+
+var limit = qs.limit ?? 100
 
 {{ `select p."Id", 
            "ProductName",
@@ -12,23 +14,24 @@
            inner join "Category" c on p."CategoryId" = c."Id"
            inner join "Supplier" s on p."SupplierId" = s."Id"
      where "Discontinued" = ${sqlFalse}`
-  | assignTo: sql }}
+     |> to => sql }}
 
-{{#if !isEmpty(PathArgs)}}
-  {{ `${sql} and p."Id" = @id` | dbSingle({ id: toInt(PathArgs[0]) }) 
-     | return }}
-{{/if}}
+#if !PathArgs.isEmpty()
+  `${sql} and p."Id" = @id` |> dbSingle({ id: PathArgs[0] }) |> return
+/if
 
-{{#if id}}           {{ 'p."Id" = @id'                 | addTo: filters }} {{/if}}
-{{#if category}}     {{ 'c."CategoryName" = @category' | addTo: filters }} {{/if}}
-{{#if supplier}}     {{ 's."CompanyName" = @supplier'  | addTo: filters }} {{/if}}
-{{#if nameContains}} {{ '"ProductName" LIKE @name'     | addTo: filters }} {{/if}}
+var filters = []
+'p."Id" = @id'                 |> ifExists(id)           |> addTo => filters
+'c."CategoryName" = @category' |> ifExists(category)     |> addTo => filters
+'s."CompanyName" = @supplier'  |> ifExists(supplier)     |> addTo => filters
+'"ProductName" LIKE @name'     |> ifExists(nameContains) |> addTo => filters
+ProductName" LIKE @name'     | addTo: filters }} {{/if}}
 
-{{#if !isEmpty(filters)}}
-  {{ `${sql} and ${join(filters, ' and ')}` | assignTo: sql }}
-{{/if}}
+#if !filters.isEmpty()
+  sql = `${sql} AND ${filters.join(' AND ')}`
+/if
 
-{{ `${sql} ORDER BY "CompanyName" ${sqlLimit(limit)}` | assignTo: sql }}
+sql = `${sql} ORDER BY "CompanyName" ${sqlLimit(limit)}`
 
-{{ sql | dbSelect({ id:toInt(id), category, supplier, name: `%${nameContains}%` }) 
-       | return }}
+sql |> dbSelect({ id, category, supplier, name: `%${nameContains}%` }) |> return
+```

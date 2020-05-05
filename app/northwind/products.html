@@ -4,34 +4,43 @@ title: Products
 
 <a id="back" href="javascript:history.back()">&#8592; Back</a>
 
+```code|q
 {{ 'id,category,supplier,nameContains' | importRequestParams }}
 
-{{ `select p."Id", 
+{{ `SELECT p."Id", 
            "ProductName",
            c."CategoryName" "Category",
            s."CompanyName" "Supplier", 
            "QuantityPerUnit", 
            ${sqlCurrency('"UnitPrice"')} "UnitPrice", 
            "UnitsInStock", "UnitsOnOrder", "ReorderLevel"   
-      from "Product" p
+           FROM "Product" p
            inner join "Category" c on p."CategoryId" = c."Id"
            inner join "Supplier" s on p."SupplierId" = s."Id"
-     where "Discontinued" = ${sqlFalse}`
-  | assignTo: sql }}
+           WHERE "Discontinued" = ${sqlFalse}`
+    |> to => sql }}
 
-{{#if !isEmpty(PathArgs)}}
-  {{ `${sql} and p."Id" = @id` | dbSingle({ id: toInt(PathArgs[0]) }) 
-     | return }}
-{{/if}}
+    #if !PathArgs.isEmpty()
+  `${sql} and p.Id = @id` |> dbSingle({ id: PathArgs[0] }) |> return
+/if
 
-{{#if id}}           {{ 'p."Id" = @id'                 | addTo: filters }} {{/if}}
-{{#if category}}     {{ 'c."CategoryName" = @category' | addTo: filters }} {{/if}}
-{{#if supplier}}     {{ 's."CompanyName" = @supplier'  | addTo: filters }} {{/if}}
-{{#if nameContains}} {{ '"ProductName" LIKE @name'     | addTo: filters }} {{/if}}
+#if !PathArgs.isEmpty()
+  `${sql} and p."Id" = @id` |> dbSingle({ id: PathArgs[0] }) |> return
+/if
 
-{{#if !isEmpty(filters)}}
-  {{ `${sql} and ${join(filters, ' and ')} ORDER BY "CompanyName" ${sqlLimit(limit)}` | assignTo: sql }}
-{{/if}}
+var filters = []
+'p."Id" = @id'                 |> ifExists(id)           |> addTo => filters
+'c."CategoryName" = @category' |> ifExists(category)     |> addTo => filters
+'s."CompanyName" = @supplier'  |> ifExists(supplier)     |> addTo => filters
+'"ProductName" LIKE @name'     |> ifExists(nameContains) |> addTo => filters
+ProductName" LIKE @name'     | addTo: filters }} {{/if}}
 
-{{ sql | dbSelect({ id:toInt(id), category, supplier, name: `%${nameContains}%` }) 
-       | htmlDump({ className: "table table-striped" }) }}
+#if !filters.isEmpty()
+  sql = `${sql} AND ${filters.join(' AND ')}`
+/if
+
+sql = `${sql} ORDER BY "CompanyName" ${sqlLimit(limit)}`
+```
+
+{{ sql |> dbSelect({ id:toInt(id), category, supplier, name: `%${nameContains}%` }) 
+       |> htmlDump({ className: "table table-striped" }) }}

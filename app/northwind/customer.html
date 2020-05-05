@@ -4,11 +4,11 @@ title: Customer Details
 
 <a id="back" href="javascript:history.back()">&#8592; Back</a>
 
-{{ 'id' | importRequestParams }}
+{{ 'id' |> importRequestParams }}
 
 {{#if id}}
-    {{ 'select * from "Customer" where "Id" = @id' | dbSingle({ id }) 
-       | assignTo: customer }}
+    {{ 'select * from "Customer" where "Id" = @id' |> dbSingle({ id }) 
+       |> to => customer }}
 
     {{#if customer}}
         {{ `select o."Id", 
@@ -22,8 +22,8 @@ title: Customer Details
                   "Employee" e on o."EmployeeId" = e."Id"
             where "CustomerId" = @id
             group by o."Id", e."FirstName", e."LastName", "EmployeeId", "OrderDate", "ShipCountry", "ShippedDate"`
-          | dbSelect({ id }) 
-          | assignTo: orders }}
+          |> dbSelect({ id }) 
+          |> to => orders }}
 
         {{#with customer}}
         <h3 style="color:#4CAF50; padding:20px 0">{{ CompanyName }}</h3>
@@ -51,7 +51,7 @@ title: Customer Details
         </table>
         {{/with}}
           
-        {{ orders | htmlDump({ 
+        {{ orders |> htmlDump({ 
             className: 'table table-striped details', 
             caption: `${customer.CompanyName}'s Orders`,
             emptyCaption: `There's no orders from ${CompanyName} yet`
