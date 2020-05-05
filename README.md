@@ -17,7 +17,7 @@ Run as a .NET Core Web App (Windows, macOS, Linux):
 
     $ dotnet tool install -g web
 
-    $ web install rockwind-aws
+    $ x install rockwind-aws
     $ cd rockwind-aws && web
 
 > Requires [.NET Core 2.1](https://www.microsoft.com/net/download/dotnet-core/2.1).
