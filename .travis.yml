@@ -1,12 +1,15 @@
-os: linux
-dist: trusty
+dist: xenial
+addons:
+  snaps:
+  - name: dotnet-sdk
+    classic: true
+    channel: latest/stable
 sudo: required
-dotnet: 2.0.0
+language: csharp
 mono: none
-env: DOTNETCORE=1
-services:
-  - docker
 script:
+  - sudo snap alias dotnet-sdk.dotnet dotnet
+  - dotnet --version
   - chmod +x ./deploy-envs.sh
   - chmod +x ./scripts/build.sh
   - chmod +x ./scripts/deploy.sh

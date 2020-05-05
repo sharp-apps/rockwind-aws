@@ -1,8 +1,8 @@
 # rockwind-aws
 
-rockwind-aws is a [Pure Cloud App](http://templates.servicestack.net/docs/web-apps#pure-cloud-apps) Rockwind example website running entirely on AWS
+rockwind-aws is a [Pure Cloud App](https://sharpscript.net/docs/sharp-apps#pure-cloud-apps) Rockwind example website running entirely on AWS
 
-[![](https://raw.githubusercontent.com/NetCoreApps/TemplatePages/master/src/wwwroot/assets/img/screenshots/rockwind.png)](http://rockwind-aws.web-app.io)
+[![](https://raw.githubusercontent.com/ServiceStack/sharpscript/master/src/wwwroot/assets/img/screenshots/rockwind.png)](http://rockwind-aws.web-app.io)
 
 ## Install
 
@@ -15,13 +15,13 @@ Run as a Desktop App (Windows only):
 
 Run as a .NET Core Web App (Windows, macOS, Linux):
 
-    $ dotnet tool install -g web
+    $ dotnet tool install -g x
 
-    $ x install rockwind-aws
-    $ cd rockwind-aws && web
+    $ x install rockwind
+    $ cd rockwind && x
 
-> Requires [.NET Core 2.1](https://www.microsoft.com/net/download/dotnet-core/2.1).
+> Requires [.NET Core 3.1](https://www.microsoft.com/net/download/dotnet-core/3.1).
 
 ## Learn
 
-See [templates.servicestack.net/docs/web-apps](http://templates.servicestack.net/docs/web-apps) to learn about ServiceStack .NET Core 2.1 Web Apps.
+See [sharpscript.net/docs/sharp-apps](http://sharpscript.net/docs/sharp-apps) to learn about ServiceStack .NET Core 3.1 Sharp Apps.
