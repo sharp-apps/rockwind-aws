@@ -20,7 +20,7 @@ Run as a .NET Core Web App (Windows, macOS, Linux):
     $ x install rockwind
     $ cd rockwind && x
 
-> Requires [.NET Core 3.1](https://www.microsoft.com/net/download/dotnet-core/3.1).
+> Requires [.NET 5](https://www.microsoft.com/net/download/).
 
 ## Learn
 
