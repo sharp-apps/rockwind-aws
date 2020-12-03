@@ -2,7 +2,7 @@
 
 rockwind-aws is a [Pure Cloud App](https://sharpscript.net/docs/sharp-apps#pure-cloud-apps) Rockwind example website running entirely on AWS
 
-[![](https://raw.githubusercontent.com/ServiceStack/sharpscript/master/src/wwwroot/assets/img/screenshots/rockwind.png)](http://rockwind-aws.web-app.io)
+![](https://raw.githubusercontent.com/ServiceStack/sharpscript/master/src/wwwroot/assets/img/screenshots/rockwind.png)
 
 ## Install
 
